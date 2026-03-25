@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Локальный сервер
+*.log
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Временные файлы
+*.tmp
+*.bak
+
+# Чувствительные данные (если будут)
+*.key
+*.pem
+.crt
+secret*.json
+config*.local.json
+
+# Кэш браузера
+.cache/
+
+# Локальные конфиги
+.local.env
+.env.local

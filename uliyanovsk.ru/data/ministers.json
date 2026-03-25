@@ -1,0 +1,27 @@
+{
+	"Анатолий Склонный": {
+		"link": "minister-sklonnyi.html",
+		"pathMp3": "files/mp3/services/anatoly_sklonnyi/",
+		"pathMp4": "files/video/services/anatoly_sklonnyi/"
+	},
+	"Илья Акатов": {
+		"link": "minister-akatov.html",
+		"pathMp3": "files/mp3/services/iliya_akatov/",
+		"pathMp4": "files/video/services/iliya_akatov/"
+	},
+	"Виталий Сторожок": {
+		"link": "minister-storozhok.html",
+		"pathMp3": "files/mp3/services/vitaliy_storozhok/",
+		"pathMp4": "files/video/services/vitaliy_storozhok/"
+	},
+	"Алексей Рыбальченко": {
+		"link": "minister-rybalchenko.html",
+		"pathMp3": "files/mp3/services/aleksey_rybalchenko/",
+		"pathMp4": "files/video/services/aleksey_rybalchenko/"
+	},
+	"Владимир Рябов": {
+		"link": "minister-ryabov.html",
+		"pathMp3": "files/mp3/services/vladimir_ryabov/",
+		"pathMp4": "files/video/services/vladimir_ryabov/"
+	}
+}

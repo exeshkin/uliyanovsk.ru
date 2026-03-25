@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /docs/errors/
+Disallow: /data/
+Disallow: /phpmailer/
+Disallow: /video-stream/
+Disallow: /video-closed/
+Disallow: /stat/
+Disallow: /includes/
+Allow: /
+
+Sitemap: https://uliyanovsk.ru/sitemap.xml

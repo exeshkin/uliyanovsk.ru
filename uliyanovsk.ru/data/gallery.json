@@ -1,0 +1,201 @@
+{
+	"2025-10-30-23-00": {
+		"category": "Видеообзор",
+		"name": "Поездка в Рожок",
+		"nameOptional": "",
+		"whenWasThat": "Сентябрь-Октябрь 2025",
+		"urlScreen": "2025-10-Rozhok.webp"
+	},
+	"2025-10-05-23-00": {
+		"category": "Фотоальбом",
+		"name": "Поездка в Рожок",
+		"nameOptional": "",
+		"whenWasThat": "Октябрь - Ноябрь 2025",
+		"urlGallery": "files/foto/2025-10-Rozhok/",
+		"urlScreen": "2025-10-Rozhok.webp",
+		"numberOfPhotos": 59
+	},
+	"2025-08-31-23-00": {
+		"category": "Фотоальбом",
+		"name": "Выезд на природу в Тереньгу",
+		"nameOptional": "",
+		"whenWasThat": "Август 2025",
+		"urlGallery": "files/foto/2025-08-Terenga/",
+		"urlScreen": "2025-08-Terenga.webp",
+		"numberOfPhotos": 83
+	},
+	"2025-07-31-23-00": {
+		"category": "Видеообзор",
+		"name": "Поездка на Кавказ",
+		"nameOptional": "",
+		"whenWasThat": "Июнь-Июль 2025",
+		"urlScreen": "2025-07-Kavkaz.webp"
+	},
+	"2025-06-03-23-00-00": {
+		"category": "Видеообзор",
+		"name": "Крещение сестры Марии",
+		"nameOptional": "",
+		"whenWasThat": "Июнь 2025",
+		"urlScreen": "2025-06-01-Kreshchenie-Marii.webp"
+	},
+	"2025-06-02-23-00": {
+		"category": "Фотоальбом",
+		"name": "Выезд на природу в Тереньгу",
+		"nameOptional": "",
+		"whenWasThat": "Май-Июнь 2025",
+		"urlGallery": "files/foto/2025-05-06-Terenga/",
+		"urlScreen": "2025-05-06-Terenga.webp",
+		"numberOfPhotos": 73
+	},
+	"2025-05-26-23-00": {
+		"category": "Видеообзор",
+		"name": "29-я годовщина церкви &laquo;Общение Христиан&raquo;",
+		"nameOptional": "",
+		"whenWasThat": "Май 2025",
+		"urlScreen": "2025-05-Obshchenie-Hristian-29.webp"
+	},
+	"2025-05-05-23-30-00": {
+		"category": "Видеообзор",
+		"name": "Крещение Леонида и Альбины Никоновых",
+		"nameOptional": "",
+		"whenWasThat": "Май 2025",
+		"urlScreen": "2025-05-05-Kreshchenie-Nikonovyh.webp"
+	},
+	"2025-05-20-23-00": {
+		"category": "Фотоальбом",
+		"name": "Поездка в Оренбург и Орск",
+		"nameOptional": "",
+		"whenWasThat": "Май 2025",
+		"urlGallery": "files/foto/2025-05-Orenbugr-Orsk/",
+		"urlScreen": "2025-05-Orenbugr-Orsk.webp",
+		"numberOfPhotos": 59
+	},
+	"2025-05-09-23-00": {
+		"category": "Фотоальбом",
+		"name": "29-я годовщина церкви &laquo;Общение Христиан&raquo;",
+		"nameOptional": "",
+		"whenWasThat": "Май 2025",
+		"urlGallery": "files/foto/2025-05-Obshchenie-Hristian-29/",
+		"urlScreen": "2025-05-Obshchenie-Hristian-29.webp",
+		"numberOfPhotos": 102
+	},
+	"2025-03-01-23-30": {
+		"category": "Фотоальбом",
+		"name": "Выезд за город на отдых",
+		"nameOptional": "",
+		"whenWasThat": "Март 2025",
+		"urlGallery": "files/foto/2025-03-Vyezd-za-gorod-na-otdyh/",
+		"urlScreen": "2025-03-Vyezd-za-gorod-na-otdyh.webp",
+		"numberOfPhotos": 63
+	},
+	"2025-03-01-23-00": {
+		"category": "Видеообзор",
+		"name": "Выезд за город на отдых",
+		"nameOptional": "",
+		"whenWasThat": "Март 2025",
+		"urlScreen": "2025-03-Vyezd-za-gorod-na-otdyh.webp"
+	},
+	"2024-11-30-23-30": {
+		"category": "Видеообзор",
+		"name": "Поездка в Рожок",
+		"nameOptional": "",
+		"whenWasThat": "Ноябрь 2024",
+		"urlScreen": "2024-11-Rozhok.webp"
+	},
+	"2025-01-15-23-00": {
+		"category": "Видеообзор",
+		"name": "Встреча Нового 2025 года",
+		"nameOptional": "",
+		"whenWasThat": "Январь 2025",
+		"urlScreen": "2025-01-Novyi-god.webp"
+	},
+	"2024-11-30-23-00": {
+		"category": "Фотоальбом",
+		"name": "Поездка в Рожок",
+		"nameOptional": "",
+		"whenWasThat": "Ноябрь 2024",
+		"urlGallery": "files/foto/2024-11-Rozhok/",
+		"urlScreen": "2024-11-Rozhok.webp",
+		"numberOfPhotos": 93
+	},
+	"2024-10-28-23-00": {
+		"category": "Видеообзор",
+		"name": "Поездка в Башкирию",
+		"nameOptional": "",
+		"whenWasThat": "Август 2024",
+		"urlScreen": "2024-08-Bashkiriiya.webp"
+	},
+	"2024-09-22-23-00": {
+		"category": "Видеообзор",
+		"name": "Поездка в Казань",
+		"nameOptional": "",
+		"whenWasThat": "Сентябрь 2024",
+		"urlScreen": "2024-09-Poezdka-v-Kazan.webp"
+	},
+	"2024-05-30-23-00": {
+		"category": "Видеообзор",
+		"name": "28-я годовщина церкви &laquo;Общение Христиан&raquo;",
+		"nameOptional": "",
+		"whenWasThat": "Май 2024",
+		"urlScreen": "2024-05-Obshchenie-Hristian-28.webp"
+	},
+	"2024-07-10-23-00": {
+		"category": "Фотоальбом",
+		"name": "Поездка в Беларусь, Лиски",
+		"nameOptional": "",
+		"whenWasThat": "Июнь 2024",
+		"urlGallery": "files/foto/2024-06-Liski/",
+		"urlScreen": "2024-06-Liski.webp",
+		"numberOfPhotos": 100
+	},
+	"2024-06-10-23-00": {
+		"category": "Фотоальбом",
+		"name": "Выезд на природу в Тереньгу",
+		"nameOptional": "",
+		"whenWasThat": "Июнь 2024",
+		"urlGallery": "files/foto/2024-06-Terenga/",
+		"urlScreen": "2024-06-Terenga.webp",
+		"numberOfPhotos": 100
+	},
+	"2024-06-01-23-00": {
+		"category": "Фотоальбом",
+		"name": "28-я годовщина церкви &laquo;Общение Христиан&raquo;",
+		"nameOptional": "",
+		"whenWasThat": "Май 2024",
+		"urlGallery": "files/foto/2024-05-Obshchenie-Hristian-28/",
+		"urlScreen": "2024-05-Obshchenie-Hristian-28.webp",
+		"numberOfPhotos": 220
+	},
+	"2024-02-25-23-00": {
+		"category": "Видеообзор",
+		"name": "Поездка в Алушту и Мелитополь",
+		"nameOptional": "",
+		"whenWasThat": "Февраль 2024",
+		"urlScreen": "2024-02-Alushta-Melitopol.webp"
+	},
+	"2024-02-24-23-30-00": {
+		"category": "Видеообзор",
+		"name": "Выезд за город на отдых",
+		"nameOptional": "",
+		"whenWasThat": "Февраль 2024",
+		"urlScreen": "2024-02-Vyezd-za-gorod-na-otdyh.webp"
+	},
+	"2024-03-03-23-00": {
+		"category": "Фотоальбом",
+		"name": "Выезд на Голубое озеро",
+		"nameOptional": "",
+		"whenWasThat": "Март 2024",
+		"urlGallery": "files/foto/2024-03-Goluboe-ozero/",
+		"urlScreen": "2024-03-Goluboe-ozero.webp",
+		"numberOfPhotos": 43
+	},
+	"2024-02-24-23-00": {
+		"category": "Фотоальбом",
+		"name": "Выезд за город на отдых",
+		"nameOptional": "",
+		"whenWasThat": "Февраль 2024",
+		"urlGallery": "files/foto/2024-02-Bayarskaya-Usadba/",
+		"urlScreen": "2024-02-Bayarskaya-Usadba.webp",
+		"numberOfPhotos": 106
+	}
+}

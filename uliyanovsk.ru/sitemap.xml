@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <!-- Главная страница -->
+    <url>
+        <loc>https://uliyanovsk.ru/</loc>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Служение — страницы служителей -->
+    <url>
+        <loc>https://uliyanovsk.ru/minister-sklonnyi.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/minister-akatov.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/minister-storozhok.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/minister-rybalchenko.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/minister-ryabov.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Послание — по годам -->
+    <url>
+        <loc>https://uliyanovsk.ru/message-years-1947-1957.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/message-years-1958-1962.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/message-years-1963-1965.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Поклонение -->
+    <url>
+        <loc>https://uliyanovsk.ru/worship.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Псалмы -->
+    <url>
+        <loc>https://uliyanovsk.ru/psalms-2025.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/psalms-2024.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/psalms-2023.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Фото и видео -->
+    <url>
+        <loc>https://uliyanovsk.ru/photo-list.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/video-list.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Трансляция -->
+    <url>
+        <loc>https://uliyanovsk.ru/streamvideo.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Контакты -->
+    <url>
+        <loc>https://uliyanovsk.ru/contacts.html</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+</urlset>
