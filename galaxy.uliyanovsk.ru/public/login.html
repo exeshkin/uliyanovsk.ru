@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход — Админка</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="login-page">
+  <div class="login-box">
+    <h1>Админка</h1>
+    <p>Церковь г. Ульяновск</p>
+    <form id="loginForm">
+      <input
+        type="password"
+        id="password"
+        placeholder="Введите пароль"
+        autocomplete="current-password"
+      >
+      <div id="errorMsg" class="error-msg"></div>
+      <button type="submit">Войти</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const password = document.getElementById('password').value
+      const errorMsg = document.getElementById('errorMsg')
+
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        window.location.href = '/'
+      } else {
+        errorMsg.textContent = data.message || 'Неверный пароль'
+      }
+    })
+  </script>
+</body>
+</html>

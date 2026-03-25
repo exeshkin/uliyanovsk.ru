@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Галерея — Админка</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <h2>Церковь Ульяновск</h2>
+      <nav>
+        <a href="/index.html">Главная</a>
+        <a href="/messages.html">Послание</a>
+        <a href="/ministers.html">Служители</a>
+        <a href="/services.html">Служения</a>
+        <a href="/psalms.html">Псалмы</a>
+        <a href="/music.html">Музыка</a>
+        <a href="/gallery.html" class="active">Галерея</a>
+        <a href="/stream.html">Трансляция</a>
+        <a href="/notify.html">Уведомление</a>
+        <a href="/password.html">Смена пароля</a>
+      </nav>
+      <div class="sidebar-logout">
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Галерея</h1>
+
+      <div id="alert"></div>
+
+      <!-- Форма добавления/редактирования -->
+      <div class="card" id="formCard">
+        <h2 id="formTitle">Добавить запись</h2>
+        <div class="form-group">
+          <label>Категория</label>
+          <select id="gCategory" onchange="toggleCategoryFields()">
+            <option value="Видеообзор">Видеообзор</option>
+            <option value="Фотоальбом">Фотоальбом</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Дата</label>
+          <input type="date" id="gDate">
+        </div>
+        <div class="form-group">
+          <label>ID записи (заполняется автоматически)</label>
+          <input type="text" id="gId" placeholder="заполняется автоматически">
+        </div>
+        <div class="form-group">
+          <label>Название <span style="color:red">*</span></label>
+          <input type="text" id="gName" placeholder="Поездка в Рожок">
+        </div>
+        <div class="form-group">
+          <label>Дополнительное название</label>
+          <input type="text" id="gNameOptional" placeholder="Необязательно">
+        </div>
+        <div class="form-group">
+          <label>Период <span style="color:red">*</span></label>
+          <input type="text" id="gWhenWasThat" placeholder="Сентябрь-Октябрь 2025">
+        </div>
+        <div class="form-group">
+          <label>Превью (urlScreen) <span style="color:red">*</span></label>
+          <input type="text" id="gUrlScreen" placeholder="2025-10-Rozhok.webp">
+        </div>
+
+        <!-- Поля только для фотоальбома -->
+        <div id="photoFields" style="display:none;">
+          <div class="form-group">
+            <label>Папка с фото (urlGallery)</label>
+            <input type="text" id="gUrlGallery" placeholder="files/foto/2025-10-Rozhok/">
+          </div>
+          <div class="form-group">
+            <label>Количество фото</label>
+            <input type="number" id="gNumberOfPhotos" placeholder="59" min="0">
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-primary" id="saveBtn">Добавить</button>
+          <button class="btn" id="cancelBtn" style="display:none; background:#e0e0e0; color:#333;">
+            Отмена
+          </button>
+        </div>
+      </div>
+
+      <!-- Список -->
+      <div class="card">
+        <h2>Список записей <span id="countLabel"></span></h2>
+
+        <!-- Фильтр -->
+        <div style="display:flex; gap:10px; margin-bottom:16px;">
+          <button class="btn btn-primary" onclick="filterGallery('all')">Все</button>
+          <button class="btn" onclick="filterGallery('Видеообзор')"
+            style="background:#e0e0e0; color:#333;">Видеообзоры</button>
+          <button class="btn" onclick="filterGallery('Фотоальбом')"
+            style="background:#e0e0e0; color:#333;">Фотоальбомы</button>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Дата</th>
+              <th>Категория</th>
+              <th>Название</th>
+              <th>Период</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="galleryList">
+            <tr><td colspan="5">Загрузка...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    fetch('/api/auth/check')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.loggedIn) window.location.href = '/login.html'
+      })
+
+    const alertBox = document.getElementById('alert')
+    let allGallery = {}
+    let currentFilter = 'all'
+    let editingId = null
+
+    function showAlert(message, type) {
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`
+      setTimeout(() => alertBox.innerHTML = '', 3000)
+    }
+
+    // Показать/скрыть поля фотоальбома
+    function toggleCategoryFields() {
+      const cat = document.getElementById('gCategory').value
+      document.getElementById('photoFields').style.display =
+        cat === 'Фотоальбом' ? '' : 'none'
+    }
+
+    // Автозаполнение ID из даты
+    document.getElementById('gDate').addEventListener('change', async () => {
+      const date = document.getElementById('gDate').value
+      if (date) {
+        const res = await fetch('/api/data/gallery')
+        const data = await res.json()
+        const existing = Object.keys(data).filter(k => k.startsWith(date + '-'))
+        const nextIndex = existing.length + 1
+        const id = `${date}-${nextIndex}`
+        document.getElementById('gId').value = id
+      }
+    })
+
+    // Фильтрация
+    function filterGallery(filter) {
+      currentFilter = filter
+      renderList()
+    }
+
+    // Загрузка
+    async function loadGallery() {
+      const res = await fetch('/api/data/gallery')
+      allGallery = await res.json()
+      renderList()
+    }
+
+    function renderList() {
+      const entries = Object.entries(allGallery)
+        .filter(([id, item]) => currentFilter === 'all' || item.category === currentFilter)
+        .sort((a, b) => b[0].localeCompare(a[0]))
+
+      document.getElementById('countLabel').textContent = `(${entries.length})`
+      const tbody = document.getElementById('galleryList')
+
+      if (entries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Записей нет</td></tr>'
+        return
+      }
+
+      tbody.innerHTML = entries.map(([id, item]) => `
+        <tr>
+          <td>${item.category === 'Фотоальбом'
+            ? id
+            : id}
+          </td>
+          <td>
+            <span style="font-size:12px; padding:2px 8px; border-radius:4px;
+              background:${item.category === 'Фотоальбом' ? '#d4edda' : '#cce5ff'};
+              color:${item.category === 'Фотоальбом' ? '#155724' : '#004085'};">
+              ${item.category}
+            </span>
+          </td>
+          <td>
+            ${item.name}
+            ${item.nameOptional ? `<br><span style="font-size:12px; color:#888;">${item.nameOptional}</span>` : ''}
+          </td>
+          <td>${item.whenWasThat}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn btn-primary" style="margin-right:6px; padding:6px 12px;"
+              onclick="editGallery('${id}')">Изменить</button>
+            <button class="btn btn-danger" style="padding:6px 12px;"
+              onclick="deleteGallery('${id}')">Удалить</button>
+          </td>
+        </tr>
+      `).join('')
+    }
+
+    loadGallery()
+
+    // Редактирование
+    function editGallery(id) {
+      const item = allGallery[id]
+      editingId = id
+
+      document.getElementById('formTitle').textContent = 'Редактировать запись'
+      document.getElementById('saveBtn').textContent = 'Сохранить'
+      document.getElementById('cancelBtn').style.display = ''
+
+      document.getElementById('gCategory').value = item.category
+      document.getElementById('gId').value = id
+      document.getElementById('gDate').value = id.slice(0, 10)
+      document.getElementById('gName').value = item.name
+      document.getElementById('gNameOptional').value = item.nameOptional || ''
+      document.getElementById('gWhenWasThat').value = item.whenWasThat
+      document.getElementById('gUrlScreen').value = item.urlScreen
+
+      if (item.category === 'Фотоальбом') {
+        document.getElementById('photoFields').style.display = ''
+        document.getElementById('gUrlGallery').value = item.urlGallery || ''
+        document.getElementById('gNumberOfPhotos').value = item.numberOfPhotos || ''
+      } else {
+        document.getElementById('photoFields').style.display = 'none'
+      }
+
+      // Прокрутка к форме
+      document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' })
+    }
+
+    // Отмена редактирования
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      resetForm()
+    })
+
+    function resetForm() {
+      editingId = null
+      document.getElementById('formTitle').textContent = 'Добавить запись'
+      document.getElementById('saveBtn').textContent = 'Добавить'
+      document.getElementById('cancelBtn').style.display = 'none'
+      document.getElementById('gDate').value = ''
+      document.getElementById('gId').value = ''
+      document.getElementById('gName').value = ''
+      document.getElementById('gNameOptional').value = ''
+      document.getElementById('gWhenWasThat').value = ''
+      document.getElementById('gUrlScreen').value = ''
+      document.getElementById('gUrlGallery').value = ''
+      document.getElementById('gNumberOfPhotos').value = ''
+      document.getElementById('photoFields').style.display = 'none'
+      document.getElementById('gCategory').value = 'Видеообзор'
+    }
+
+    // Сохранение
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const id = document.getElementById('gId').value.trim()
+      const category = document.getElementById('gCategory').value
+      const name = document.getElementById('gName').value.trim()
+      const nameOptional = document.getElementById('gNameOptional').value.trim()
+      const whenWasThat = document.getElementById('gWhenWasThat').value.trim()
+      const urlScreen = document.getElementById('gUrlScreen').value.trim()
+      const urlGallery = document.getElementById('gUrlGallery').value.trim()
+      const numberOfPhotos = document.getElementById('gNumberOfPhotos').value
+
+      if (!id || !name || !whenWasThat || !urlScreen) {
+        return showAlert('Заполните обязательные поля', 'error')
+      }
+
+      const body = { category, name, nameOptional, whenWasThat, urlScreen }
+      if (category === 'Фотоальбом') {
+        body.urlGallery = urlGallery
+        body.numberOfPhotos = numberOfPhotos
+      }
+
+      let res
+      if (editingId) {
+        const newId = document.getElementById('gId').value.trim()
+        if (newId !== editingId) {
+          // ID изменился — удаляем старую запись и создаём новую с нужным ID
+          await fetch('/api/data/gallery/' + encodeURIComponent(editingId), { method: 'DELETE' })
+          res = await fetch('/api/data/gallery/' + encodeURIComponent(newId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          })
+        } else {
+          res = await fetch('/api/data/gallery/' + encodeURIComponent(editingId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          })
+        }
+      } else {
+        res = await fetch('/api/data/gallery', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ date: document.getElementById('gDate').value, ...body })
+        })
+      }
+
+      const data = await res.json()
+
+      if (data.success) {
+        showAlert(editingId ? 'Запись обновлена' : `Запись добавлена: ${data.id}`, 'success')
+        resetForm()
+        loadGallery()
+      } else {
+        showAlert(data.error || 'Ошибка сохранения', 'error')
+      }
+    })
+
+    // Удаление
+    async function deleteGallery(id) {
+      if (!confirm(`Удалить запись "${id}"?`)) return
+
+      const res = await fetch('/api/data/gallery/' + encodeURIComponent(id), {
+        method: 'DELETE'
+      })
+      const data = await res.json()
+
+      if (data.success) {
+        showAlert('Запись удалена', 'success')
+        loadGallery()
+      } else {
+        showAlert('Ошибка удаления', 'error')
+      }
+    }
+  </script>
+</body>
+</html>

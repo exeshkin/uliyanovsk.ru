@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Музыка — Админка</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <h2>Церковь Ульяновск</h2>
+      <nav>
+        <a href="/index.html">Главная</a>
+        <a href="/messages.html">Послание</a>
+        <a href="/ministers.html">Служители</a>
+        <a href="/services.html">Служения</a>
+        <a href="/psalms.html">Псалмы</a>
+        <a href="/music.html" class="active">Музыка</a>
+					<a href="/gallery.html">Галерея</a>
+        <a href="/stream.html">Трансляция</a>
+        <a href="/notify.html">Уведомление</a>
+        <a href="/password.html">Смена пароля</a>
+      </nav>
+      <div class="sidebar-logout">
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Музыка</h1>
+
+      <div id="alert"></div>
+
+      <div class="card">
+        <h2>Добавить запись</h2>
+        <div class="form-group">
+          <label>Дата</label>
+          <input type="date" id="musicDate">
+        </div>
+        <div class="form-group">
+          <label>ID записи (заполняется автоматически)</label>
+          <input type="text" id="musicId" readonly
+            style="background:#f8f9fa; color:#888;">
+        </div>
+        <p style="font-size:13px; color:#888; margin-bottom:16px;">
+          Имя файла на сервере должно совпадать с ID:
+          <strong id="fileNameHint">—</strong>
+        </p>
+        <button class="btn btn-primary" id="addBtn">Добавить</button>
+      </div>
+
+      <div class="card">
+        <h2>Список записей <span id="countLabel"></span></h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID / Имя файла</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="musicList">
+            <tr><td colspan="2">Загрузка...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    fetch('/api/auth/check')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.loggedIn) window.location.href = '/login.html'
+      })
+
+    const alertBox = document.getElementById('alert')
+
+    function showAlert(message, type) {
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`
+      setTimeout(() => alertBox.innerHTML = '', 3000)
+    }
+
+    // Автозаполнение ID из даты
+    document.getElementById('musicDate').addEventListener('change', async () => {
+      const date = document.getElementById('musicDate').value
+      if (date) {
+        // Проверяем сколько записей уже есть за эту дату
+        const res = await fetch('/api/data/music')
+        const data = await res.json()
+        const existing = Object.keys(data).filter(k => k.startsWith(date + '-'))
+        const nextIndex = existing.length + 1
+        const id = `${date}-${nextIndex}`
+        document.getElementById('musicId').value = id
+        document.getElementById('fileNameHint').textContent = id + '.mp4'
+      }
+    })
+
+    // Загрузка списка
+    async function loadMusic() {
+      const res = await fetch('/api/data/music')
+      const data = await res.json()
+
+      const entries = Object.keys(data).sort((a, b) => b.localeCompare(a))
+      document.getElementById('countLabel').textContent = `(${entries.length})`
+
+      const tbody = document.getElementById('musicList')
+
+      if (entries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2">Записей нет</td></tr>'
+        return
+      }
+
+      tbody.innerHTML = entries.map(id => `
+        <tr>
+          <td>
+            ${id}
+            <span style="font-size:12px; color:#aaa; margin-left:8px;">
+              → ${id}.mp4
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-danger" onclick="deleteMusic('${id}')">
+              Удалить
+            </button>
+          </td>
+        </tr>
+      `).join('')
+    }
+
+    loadMusic()
+
+    // Добавление
+    document.getElementById('addBtn').addEventListener('click', async () => {
+      const id = document.getElementById('musicId').value.trim()
+
+      if (!id) return showAlert('Выберите дату', 'error')
+
+      const res = await fetch('/api/data/music', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date: document.getElementById('musicDate').value })
+      })
+      const data = await res.json()
+
+      if (data.success) {
+        showAlert(`Запись добавлена: ${data.id}`, 'success')
+        document.getElementById('musicDate').value = ''
+        document.getElementById('musicId').value = ''
+        document.getElementById('fileNameHint').textContent = '—'
+        loadMusic()
+      } else {
+        showAlert(data.error || 'Ошибка сохранения', 'error')
+      }
+    })
+
+    // Удаление
+    async function deleteMusic(id) {
+      if (!confirm(`Удалить запись "${id}"?`)) return
+
+      const res = await fetch('/api/data/music/' + encodeURIComponent(id), {
+        method: 'DELETE'
+      })
+      const data = await res.json()
+
+      if (data.success) {
+        showAlert('Запись удалена', 'success')
+        loadMusic()
+      } else {
+        showAlert('Ошибка удаления', 'error')
+      }
+    }
+  </script>
+</body>
+</html>

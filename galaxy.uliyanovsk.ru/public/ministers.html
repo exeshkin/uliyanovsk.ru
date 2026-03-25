@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Служители — Админка</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <h2>Церковь Ульяновск</h2>
+      <nav>
+        <a href="/index.html">Главная</a>
+        <a href="/messages.html">Послание</a>
+        <a href="/ministers.html" class="active">Служители</a>
+        <a href="/services.html">Служения</a>
+        <a href="/psalms.html">Псалмы</a>
+        <a href="/music.html">Музыка</a>
+        <a href="/gallery.html">Галерея</a>
+        <a href="/stream.html">Трансляция</a>
+        <a href="/notify.html">Уведомление</a>
+        <a href="/password.html">Смена пароля</a>
+      </nav>
+      <div class="sidebar-logout">
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Служители</h1>
+
+      <div id="alert"></div>
+
+      <div class="card" id="formCard">
+        <h2 id="formTitle">Добавить служителя</h2>
+        <div class="form-group">
+          <label>Имя (ключ в JSON)</label>
+          <input type="text" id="minName" placeholder="Иван Иванов">
+        </div>
+        <div class="form-group">
+          <label>Ссылка на страницу</label>
+          <input type="text" id="minLink" placeholder="minister-ivanov.html">
+        </div>
+        <div class="form-group">
+          <label>Путь к MP3</label>
+          <input type="text" id="minPathMp3" placeholder="files/mp3/services/ivan_ivanov/">
+        </div>
+        <div class="form-group">
+          <label>Путь к MP4</label>
+          <input type="text" id="minPathMp4" placeholder="files/video/services/ivan_ivanov/">
+        </div>
+        <button class="btn btn-primary" id="saveBtn">Добавить</button>
+        <button class="btn" id="cancelBtn" style="display:none; margin-left:8px;">Отмена</button>
+      </div>
+
+      <div class="card">
+        <h2>Список служителей</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Имя</th>
+              <th>Страница</th>
+              <th>Путь MP3</th>
+              <th>Путь MP4</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="ministersList">
+            <tr><td colspan="5">Загрузка...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    fetch('/api/auth/check')
+      .then(r => r.json())
+      .then(data => { if (!data.loggedIn) window.location.href = '/login.html' })
+
+    const alertBox = document.getElementById('alert')
+    let editingName = null
+    let allMinisters = {}
+
+    function showAlert(message, type) {
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`
+      setTimeout(() => alertBox.innerHTML = '', 3000)
+    }
+
+    async function loadMinisters() {
+      const res = await fetch('/api/data/ministers')
+      allMinisters = await res.json()
+      const tbody = document.getElementById('ministersList')
+      const entries = Object.entries(allMinisters)
+
+      if (entries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Служителей нет</td></tr>'
+        return
+      }
+
+      tbody.innerHTML = entries.map(([name, item]) => `
+        <tr>
+          <td>${name}</td>
+          <td>${item.link}</td>
+          <td>${item.pathMp3}</td>
+          <td>${item.pathMp4}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn btn-primary" style="margin-right:6px; padding:6px 12px;"
+              onclick="editMinister('${name}')">Изменить</button>
+            <button class="btn btn-danger"
+              onclick="deleteMinister('${name}')">Удалить</button>
+          </td>
+        </tr>
+      `).join('')
+    }
+
+    loadMinisters()
+
+    function editMinister(name) {
+      const item = allMinisters[name]
+      editingName = name
+      document.getElementById('formTitle').textContent = 'Редактировать служителя'
+      document.getElementById('saveBtn').textContent = 'Сохранить'
+      document.getElementById('cancelBtn').style.display = ''
+      document.getElementById('minName').value = name
+      document.getElementById('minName').disabled = false
+      document.getElementById('minLink').value = item.link
+      document.getElementById('minPathMp3').value = item.pathMp3
+      document.getElementById('minPathMp4').value = item.pathMp4
+      document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' })
+    }
+
+    document.getElementById('cancelBtn').addEventListener('click', () => resetForm())
+
+    function resetForm() {
+      editingName = null
+      document.getElementById('formTitle').textContent = 'Добавить служителя'
+      document.getElementById('saveBtn').textContent = 'Добавить'
+      document.getElementById('cancelBtn').style.display = 'none'
+      document.getElementById('minName').value = ''
+      document.getElementById('minLink').value = ''
+      document.getElementById('minPathMp3').value = ''
+      document.getElementById('minPathMp4').value = ''
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const name = document.getElementById('minName').value.trim()
+      const link = document.getElementById('minLink').value.trim()
+      const pathMp3 = document.getElementById('minPathMp3').value.trim()
+      const pathMp4 = document.getElementById('minPathMp4').value.trim()
+
+      if (!name || !link || !pathMp3 || !pathMp4) {
+        return showAlert('Заполните все поля', 'error')
+      }
+
+      let res
+      if (editingName) {
+        // Если имя изменилось — удаляем старое и создаём новое
+        if (name !== editingName) {
+          await fetch('/api/data/ministers/' + encodeURIComponent(editingName), { method: 'DELETE' })
+          res = await fetch('/api/data/ministers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, link, pathMp3, pathMp4 })
+          })
+        } else {
+          res = await fetch('/api/data/ministers/' + encodeURIComponent(editingName), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ link, pathMp3, pathMp4 })
+          })
+        }
+      } else {
+        res = await fetch('/api/data/ministers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, link, pathMp3, pathMp4 })
+        })
+      }
+
+      const data = await res.json()
+      if (data.success) {
+        showAlert(editingName ? 'Служитель обновлён' : 'Служитель добавлен', 'success')
+        resetForm()
+        loadMinisters()
+      } else {
+        showAlert(data.error || 'Ошибка сохранения', 'error')
+      }
+    })
+
+    async function deleteMinister(name) {
+      if (!confirm(`Удалить служителя "${name}"?`)) return
+      const res = await fetch('/api/data/ministers/' + encodeURIComponent(name), {
+        method: 'DELETE'
+      })
+      const data = await res.json()
+      if (data.success) {
+        showAlert('Служитель удалён', 'success')
+        loadMinisters()
+      } else {
+        showAlert('Ошибка удаления', 'error')
+      }
+    }
+  </script>
+</body>
+</html>

@@ -27,7 +27,7 @@ desktop.ini
 *.tmp
 *.bak
 
-# Чувствительные данные (если будут)
+# Чувствительные данные
 *.key
 *.pem
 .crt
@@ -37,6 +37,11 @@ config*.local.json
 # Кэш браузера
 .cache/
 
+# Переменные окружения (содержат пароли!)
+.env
+.env.local
+.env.*.local
+*.env
+
 # Локальные конфиги
 .local.env
-.env.local

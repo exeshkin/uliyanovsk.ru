@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Псалмы — Админка</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <h2>Церковь Ульяновск</h2>
+      <nav>
+        <a href="/index.html">Главная</a>
+        <a href="/messages.html">Послание</a>
+        <a href="/ministers.html">Служители</a>
+        <a href="/services.html">Служения</a>
+        <a href="/psalms.html" class="active">Псалмы</a>
+        <a href="/music.html">Музыка</a>
+        <a href="/gallery.html">Галерея</a>
+        <a href="/stream.html">Трансляция</a>
+        <a href="/notify.html">Уведомление</a>
+        <a href="/password.html">Смена пароля</a>
+      </nav>
+      <div class="sidebar-logout">
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Псалмы</h1>
+
+      <div id="alert"></div>
+
+      <div class="card" id="formCard">
+        <h2 id="formTitle">Добавить псалом</h2>
+        <div class="form-group">
+          <label>Год</label>
+          <input type="number" id="psalmYear" min="2000" max="2100">
+        </div>
+        <div class="form-group">
+          <label>Номер (заполняется автоматически)</label>
+          <input type="text" id="psalmNum" placeholder="заполняется автоматически">
+        </div>
+        <div class="form-group">
+          <label>Название</label>
+          <input type="text" id="psalmName" placeholder="25-0107 — Название псалма">
+        </div>
+        <div class="form-group">
+          <label>Имя файла (без расширения)</label>
+          <input type="text" id="psalmFileName" placeholder="25-0107_Nazvanie_psalma">
+        </div>
+        <div class="form-group">
+          <div class="toggle-row">
+            <label class="toggle">
+              <input type="checkbox" id="psalmHasVideo" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span>Есть видео</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="saveBtn">Добавить</button>
+        <button class="btn" id="cancelBtn" style="display:none; margin-left:8px;">Отмена</button>
+      </div>
+
+      <div class="card">
+        <h2>Фильтр по году</h2>
+        <div id="yearButtons" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Список псалмов <span id="countLabel"></span></h2>
+
+        <div id="deleteYearBox" style="margin-bottom:16px; display:none;">
+          <button class="btn btn-danger" id="deleteYearBtn">
+            Удалить все псалмы за выбранный год
+          </button>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Название</th>
+              <th>Файл</th>
+              <th>Видео</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="psalmsList">
+            <tr><td colspan="5">Загрузка...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    fetch('/api/auth/check')
+      .then(r => r.json())
+      .then(data => { if (!data.loggedIn) window.location.href = '/login.html' })
+
+    const alertBox = document.getElementById('alert')
+    document.getElementById('psalmYear').value = new Date().getFullYear()
+    let currentYear = null
+    let allData = {}
+    let editingNum = null
+
+    function showAlert(message, type) {
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`
+      setTimeout(() => alertBox.innerHTML = '', 3000)
+    }
+
+    // Автозаполнение номера при смене года
+    document.getElementById('psalmYear').addEventListener('change', () => {
+      if (editingNum) return
+      updateNextNum()
+    })
+
+    async function updateNextNum() {
+      const year = document.getElementById('psalmYear').value.trim()
+      if (year && allData[year]) {
+        const nums = Object.keys(allData[year]).map(Number)
+        const nextNum = nums.length > 0 ? Math.max(...nums) + 1 : 1
+        document.getElementById('psalmNum').value = nextNum
+      } else if (year) {
+        document.getElementById('psalmNum').value = 1
+      }
+    }
+
+    async function loadData() {
+      const res = await fetch('/api/data/psalms')
+      const json = await res.json()
+      allData = json.psalms || {}
+      renderYearButtons()
+      renderList()
+      if (!editingNum) updateNextNum()
+    }
+
+    function renderYearButtons() {
+      const years = Object.keys(allData).sort((a, b) => b - a)
+      const box = document.getElementById('yearButtons')
+
+      if (years.length === 0) {
+        box.innerHTML = '<span style="color:#888">Нет данных</span>'
+        return
+      }
+
+      if (!currentYear || !allData[currentYear]) {
+        currentYear = years[0]
+      }
+
+      box.innerHTML = years.map(y => `
+        <button class="btn ${y === currentYear ? 'btn-primary' : ''}"
+          style="${y !== currentYear ? 'background:#e0e0e0; color:#333;' : ''}"
+          onclick="selectYear('${y}')">${y}</button>
+      `).join('')
+    }
+
+    function selectYear(year) {
+      currentYear = year
+      renderYearButtons()
+      renderList()
+    }
+
+    function renderList() {
+      const tbody = document.getElementById('psalmsList')
+      const deleteBox = document.getElementById('deleteYearBox')
+
+      if (!currentYear || !allData[currentYear]) {
+        tbody.innerHTML = '<tr><td colspan="5">Нет данных</td></tr>'
+        document.getElementById('countLabel').textContent = ''
+        deleteBox.style.display = 'none'
+        return
+      }
+
+      const entries = Object.entries(allData[currentYear])
+        .sort((a, b) => Number(b[0]) - Number(a[0]))
+
+      document.getElementById('countLabel').textContent = `(${entries.length})`
+      deleteBox.style.display = entries.length > 0 ? '' : 'none'
+
+      if (entries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Псалмов нет</td></tr>'
+        return
+      }
+
+      tbody.innerHTML = entries.map(([num, item]) => `
+        <tr>
+          <td>${num}</td>
+          <td>${item.name}</td>
+          <td style="font-size:12px; color:#888;">${item.fileName}</td>
+          <td>${item.hasVideo ? '✅' : '—'}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn btn-primary" style="margin-right:6px; padding:6px 12px;"
+              onclick="editPsalm('${num}')">Изменить</button>
+            <button class="btn btn-danger"
+              onclick="deletePsalm('${num}')">Удалить</button>
+          </td>
+        </tr>
+      `).join('')
+    }
+
+    loadData()
+
+    function editPsalm(num) {
+      const item = allData[currentYear][num]
+      editingNum = num
+      document.getElementById('formTitle').textContent = 'Редактировать псалом'
+      document.getElementById('saveBtn').textContent = 'Сохранить'
+      document.getElementById('cancelBtn').style.display = ''
+      document.getElementById('psalmYear').value = currentYear
+      document.getElementById('psalmNum').value = num
+      document.getElementById('psalmName').value = item.name
+      document.getElementById('psalmFileName').value = item.fileName
+      document.getElementById('psalmHasVideo').checked = item.hasVideo
+      document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' })
+    }
+
+    document.getElementById('cancelBtn').addEventListener('click', () => resetForm())
+
+    function resetForm() {
+      editingNum = null
+      document.getElementById('formTitle').textContent = 'Добавить псалом'
+      document.getElementById('saveBtn').textContent = 'Добавить'
+      document.getElementById('cancelBtn').style.display = 'none'
+      document.getElementById('psalmName').value = ''
+      document.getElementById('psalmFileName').value = ''
+      document.getElementById('psalmHasVideo').checked = true
+      updateNextNum()
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const year = document.getElementById('psalmYear').value.trim()
+      const num = document.getElementById('psalmNum').value.trim()
+      const name = document.getElementById('psalmName').value.trim()
+      const fileName = document.getElementById('psalmFileName').value.trim()
+      const hasVideo = document.getElementById('psalmHasVideo').checked
+
+      if (!year || !num || !name || !fileName) {
+        return showAlert('Заполните все поля', 'error')
+      }
+
+      let res
+      if (editingNum) {
+        if (num !== editingNum || year !== currentYear) {
+          // Номер или год изменился — удаляем старую запись
+          await fetch(`/api/data/psalms/${currentYear}/${editingNum}`, { method: 'DELETE' })
+        }
+        res = await fetch(`/api/data/psalms/${year}/${num}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, fileName, hasVideo })
+        })
+      } else {
+        res = await fetch('/api/data/psalms', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ year, name, fileName, hasVideo })
+        })
+      }
+
+      const data = await res.json()
+      if (data.success) {
+        showAlert(editingNum ? 'Псалом обновлён' : `Псалом добавлен под номером ${data.num}`, 'success')
+        if (year !== currentYear) currentYear = year
+        resetForm()
+        loadData()
+      } else {
+        showAlert(data.error || 'Ошибка сохранения', 'error')
+      }
+    })
+
+    async function deletePsalm(num) {
+      if (!confirm(`Удалить псалом №${num}?`)) return
+      const res = await fetch(`/api/data/psalms/${currentYear}/${num}`, { method: 'DELETE' })
+      const data = await res.json()
+      if (data.success) {
+        showAlert('Псалом удалён', 'success')
+        loadData()
+      } else {
+        showAlert('Ошибка удаления', 'error')
+      }
+    }
+
+    document.getElementById('deleteYearBtn').addEventListener('click', async () => {
+      if (!confirm(`Удалить ВСЕ псалмы за ${currentYear} год?`)) return
+      const res = await fetch(`/api/data/psalms/${currentYear}`, { method: 'DELETE' })
+      const data = await res.json()
+      if (data.success) {
+        showAlert(`Все псалмы за ${currentYear} год удалены`, 'success')
+        currentYear = null
+        loadData()
+      } else {
+        showAlert('Ошибка удаления', 'error')
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Уведомление — Админка</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <h2>Церковь Ульяновск</h2>
+       <nav>
+        <a href="/index.html">Главная</a>
+        <a href="/messages.html">Послание</a>
+        <a href="/ministers.html">Служители</a>
+        <a href="/services.html">Служения</a>
+        <a href="/psalms.html">Псалмы</a>
+        <a href="/music.html">Музыка</a>
+					<a href="/gallery.html">Галерея</a>
+        <a href="/stream.html">Трансляция</a>
+        <a href="/notify.html" class="active">Уведомление</a>
+        <a href="/password.html">Смена пароля</a>
+      </nav>
+      <div class="sidebar-logout">
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Уведомление</h1>
+
+      <div id="alert"></div>
+
+      <div class="card">
+        <h2>Статус уведомления</h2>
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" id="notifyToggle">
+            <span class="toggle-slider"></span>
+          </label>
+          <span id="notifyStatus">Загрузка...</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Параметры уведомления</h2>
+        <div class="form-group">
+          <label>Дата</label>
+          <input type="date" id="notifyDate">
+        </div>
+        <div class="form-group">
+          <label>Имя файла изображения</label>
+          <input type="text" id="notifyImg" placeholder="notify-2025-10-15.png">
+        </div>
+        <button class="btn btn-primary" id="saveBtn">Сохранить</button>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    // Проверка авторизации
+    fetch('/api/auth/check')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.loggedIn) window.location.href = '/login.html'
+      })
+
+    const toggle = document.getElementById('notifyToggle')
+    const status = document.getElementById('notifyStatus')
+    const notifyDate = document.getElementById('notifyDate')
+    const notifyImg = document.getElementById('notifyImg')
+    const alertBox = document.getElementById('alert')
+
+    function showAlert(message, type) {
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`
+      setTimeout(() => alertBox.innerHTML = '', 3000)
+    }
+
+    // Загрузка данных
+    fetch('/api/data/notify')
+      .then(r => r.json())
+      .then(data => {
+        const isOn = data.on === 'true'
+        toggle.checked = isOn
+        status.textContent = isOn ? 'Уведомление включено' : 'Уведомление выключено'
+        if (data.date) notifyDate.value = data.date
+        if (data.img) notifyImg.value = data.img
+      })
+
+    // Сохранение
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const res = await fetch('/api/data/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          on: toggle.checked ? 'true' : 'false',
+          date: notifyDate.value,
+          img: notifyImg.value
+        })
+      })
+      const data = await res.json()
+      if (data.success) {
+        status.textContent = toggle.checked ? 'Уведомление включено' : 'Уведомление выключено'
+        showAlert('Сохранено', 'success')
+      } else {
+        showAlert('Ошибка сохранения', 'error')
+      }
+    })
+
+    // Переключение тоггла тоже сохраняет
+    toggle.addEventListener('change', async () => {
+      const res = await fetch('/api/data/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          on: toggle.checked ? 'true' : 'false',
+          date: notifyDate.value,
+          img: notifyImg.value
+        })
+      })
+      const data = await res.json()
+      if (data.success) {
+        status.textContent = toggle.checked ? 'Уведомление включено' : 'Уведомление выключено'
+        showAlert('Статус обновлён', 'success')
+      } else {
+        showAlert('Ошибка сохранения', 'error')
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Послание — Админка</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <h2>Церковь Ульяновск</h2>
+      <nav>
+        <a href="/index.html">Главная</a>
+        <a href="/messages.html" class="active">Послание</a>
+        <a href="/ministers.html">Служители</a>
+        <a href="/services.html">Служения</a>
+        <a href="/psalms.html">Псалмы</a>
+        <a href="/music.html">Музыка</a>
+        <a href="/gallery.html">Галерея</a>
+        <a href="/stream.html">Трансляция</a>
+        <a href="/notify.html">Уведомление</a>
+        <a href="/password.html">Смена пароля</a>
+      </nav>
+      <div class="sidebar-logout">
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Послание</h1>
+
+      <div id="alert"></div>
+
+      <div class="card" id="formCard">
+        <h2 id="formTitle">Добавить проповедь</h2>
+        <div class="form-group">
+          <label>Дата (формат: ГГГГ-ММ-ДД)</label>
+          <input type="date" id="msgDate">
+        </div>
+        <div class="form-group">
+          <label>ID записи (заполняется автоматически)</label>
+          <input type="text" id="msgId" placeholder="заполняется автоматически">
+        </div>
+        <div class="form-group">
+          <label>Название</label>
+          <input type="text" id="msgName" placeholder="Название проповеди">
+        </div>
+        <div class="form-group">
+          <label>Имя файла (без расширения)</label>
+          <input type="text" id="msgFileName" placeholder="1956_10_02_Otec_prishyol_chas">
+        </div>
+        <button class="btn btn-primary" id="saveBtn">Добавить</button>
+        <button class="btn" id="cancelBtn" style="display:none; margin-left:8px;">Отмена</button>
+      </div>
+
+      <div class="card">
+        <h2>Фильтр по периоду</h2>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="filterMessages('all', this)">Все</button>
+          <button class="btn" onclick="filterMessages('1947', this)">1947–1957</button>
+          <button class="btn" onclick="filterMessages('1958', this)">1958–1962</button>
+          <button class="btn" onclick="filterMessages('1963', this)">1963–1965</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Список проповедей <span id="countLabel"></span></h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Название</th>
+              <th>Файл</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="messagesList">
+            <tr><td colspan="4">Загрузка...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    fetch('/api/auth/check')
+      .then(r => r.json())
+      .then(data => { if (!data.loggedIn) window.location.href = '/login.html' })
+
+    const alertBox = document.getElementById('alert')
+    let allMessages = {}
+    let currentFilter = 'all'
+    let editingId = null
+
+    function showAlert(message, type) {
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`
+      setTimeout(() => alertBox.innerHTML = '', 3000)
+    }
+
+    // Автозаполнение ID из даты
+    document.getElementById('msgDate').addEventListener('change', async () => {
+      const date = document.getElementById('msgDate').value
+      if (date) {
+        const res = await fetch('/api/data/messages')
+        const data = await res.json()
+        const existing = Object.keys(data).filter(k => k.startsWith(date + '-'))
+        const nextIndex = existing.length + 1
+        document.getElementById('msgId').value = `${date}-${nextIndex}`
+      }
+    })
+
+    // Фильтрация
+    function filterMessages(period, btn) {
+      currentFilter = period
+      document.querySelectorAll('.card .btn').forEach(b => {
+        b.classList.remove('btn-primary')
+        b.className = 'btn'
+      })
+      btn.classList.add('btn-primary')
+      renderMessages()
+    }
+
+    function renderMessages() {
+      const entries = Object.entries(allMessages)
+        .filter(([id]) => {
+          if (currentFilter === 'all') return true
+          const year = parseInt(id.slice(0, 4))
+          if (currentFilter === '1947') return year >= 1947 && year <= 1957
+          if (currentFilter === '1958') return year >= 1958 && year <= 1962
+          if (currentFilter === '1963') return year >= 1963 && year <= 1965
+          return true
+        })
+        .sort((a, b) => b[0].localeCompare(a[0]))
+
+      document.getElementById('countLabel').textContent = `(${entries.length})`
+      const tbody = document.getElementById('messagesList')
+
+      if (entries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4">Записей нет</td></tr>'
+        return
+      }
+
+      tbody.innerHTML = entries.map(([id, item]) => `
+        <tr>
+          <td style="font-size:12px; color:#888;">${id}</td>
+          <td>${item.name}</td>
+          <td style="font-size:12px; color:#aaa;">${item.fileName}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn btn-primary" style="margin-right:6px; padding:6px 12px;"
+              onclick="editMessage('${id}')">Изменить</button>
+            <button class="btn btn-danger"
+              onclick="deleteMessage('${id}')">Удалить</button>
+          </td>
+        </tr>
+      `).join('')
+    }
+
+    async function loadMessages() {
+      const res = await fetch('/api/data/messages')
+      allMessages = await res.json()
+      renderMessages()
+    }
+
+    loadMessages()
+
+    function editMessage(id) {
+      const item = allMessages[id]
+      editingId = id
+      document.getElementById('formTitle').textContent = 'Редактировать проповедь'
+      document.getElementById('saveBtn').textContent = 'Сохранить'
+      document.getElementById('cancelBtn').style.display = ''
+      document.getElementById('msgId').value = id
+      document.getElementById('msgDate').value = id.slice(0, 10)
+      document.getElementById('msgName').value = item.name
+      document.getElementById('msgFileName').value = item.fileName
+      document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' })
+    }
+
+    document.getElementById('cancelBtn').addEventListener('click', () => resetForm())
+
+    function resetForm() {
+      editingId = null
+      document.getElementById('formTitle').textContent = 'Добавить проповедь'
+      document.getElementById('saveBtn').textContent = 'Добавить'
+      document.getElementById('cancelBtn').style.display = 'none'
+      document.getElementById('msgDate').value = ''
+      document.getElementById('msgId').value = ''
+      document.getElementById('msgName').value = ''
+      document.getElementById('msgFileName').value = ''
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const name = document.getElementById('msgName').value.trim()
+      const fileName = document.getElementById('msgFileName').value.trim()
+
+      if (!name || !fileName) {
+        return showAlert('Заполните все поля', 'error')
+      }
+
+      let res
+      if (editingId) {
+        const newId = document.getElementById('msgId').value.trim()
+        if (!newId) return showAlert('ID не может быть пустым', 'error')
+        if (newId !== editingId) {
+          // ID изменился — удаляем старую запись и создаём новую с нужным ID
+          await fetch('/api/data/messages/' + encodeURIComponent(editingId), { method: 'DELETE' })
+          res = await fetch('/api/data/messages/' + encodeURIComponent(newId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, fileName })
+          })
+        } else {
+          res = await fetch('/api/data/messages/' + encodeURIComponent(editingId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, fileName })
+          })
+        }
+      } else {
+        const date = document.getElementById('msgDate').value
+        if (!date) return showAlert('Укажите дату', 'error')
+        res = await fetch('/api/data/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ date, name, fileName })
+        })
+      }
+
+      const data = await res.json()
+      if (data.success) {
+        showAlert(editingId ? 'Проповедь обновлена' : `Проповедь добавлена: ${data.id}`, 'success')
+        resetForm()
+        loadMessages()
+      } else {
+        showAlert(data.error || 'Ошибка сохранения', 'error')
+      }
+    })
+
+    async function deleteMessage(id) {
+      if (!confirm(`Удалить проповедь "${id}"?`)) return
+      const res = await fetch('/api/data/messages/' + encodeURIComponent(id), {
+        method: 'DELETE'
+      })
+      const data = await res.json()
+      if (data.success) {
+        showAlert('Проповедь удалена', 'success')
+        loadMessages()
+      } else {
+        showAlert('Ошибка удаления', 'error')
+      }
+    }
+  </script>
+</body>
+</html>

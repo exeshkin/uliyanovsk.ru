@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Служения — Админка</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <h2>Церковь Ульяновск</h2>
+      <nav>
+        <a href="/index.html">Главная</a>
+        <a href="/messages.html">Послание</a>
+        <a href="/ministers.html">Служители</a>
+        <a href="/services.html" class="active">Служения</a>
+        <a href="/psalms.html">Псалмы</a>
+        <a href="/music.html">Музыка</a>
+        <a href="/gallery.html">Галерея</a>
+        <a href="/stream.html">Трансляция</a>
+        <a href="/notify.html">Уведомление</a>
+        <a href="/password.html">Смена пароля</a>
+      </nav>
+      <div class="sidebar-logout">
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Служения</h1>
+
+      <div id="alert"></div>
+
+      <div class="card" id="formCard">
+        <h2 id="formTitle">Добавить служение</h2>
+        <div class="form-group">
+          <label>Дата</label>
+          <input type="date" id="svcDate">
+        </div>
+        <div class="form-group">
+          <label>ID записи</label>
+          <input type="text" id="svcId" placeholder="заполняется автоматически">
+        </div>
+        <div class="form-group">
+          <label>Служитель</label>
+          <select id="svcMinister"></select>
+        </div>
+        <div class="form-group">
+          <label>Название проповеди</label>
+          <input type="text" id="svcName" placeholder="Название проповеди">
+        </div>
+        <div class="form-group">
+          <label>Имя файла (без расширения)</label>
+          <input type="text" id="svcFileName" placeholder="26-0101_Nazvanie">
+        </div>
+        <button class="btn btn-primary" id="saveBtn">Добавить</button>
+        <button class="btn" id="cancelBtn" style="display:none; margin-left:8px;">Отмена</button>
+      </div>
+
+      <div class="card">
+        <h2>Фильтр по служителю</h2>
+        <div id="ministerButtons" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Список служений <span id="countLabel"></span></h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Служитель</th>
+              <th>Название</th>
+              <th>Файл</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="servicesList">
+            <tr><td colspan="5">Загрузка...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    fetch('/api/auth/check')
+      .then(r => r.json())
+      .then(data => { if (!data.loggedIn) window.location.href = '/login.html' })
+
+    const alertBox = document.getElementById('alert')
+    let allServices = {}
+    let allMinisters = {}
+    let currentFilter = 'all'
+    let editingId = null
+
+    function showAlert(message, type) {
+      alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`
+      setTimeout(() => alertBox.innerHTML = '', 3000)
+    }
+
+    async function loadMinisters() {
+      const res = await fetch('/api/data/ministers')
+      allMinisters = await res.json()
+      const select = document.getElementById('svcMinister')
+      select.innerHTML = Object.keys(allMinisters).map(name =>
+        `<option value="${name}">${name}</option>`
+      ).join('')
+      renderMinisterButtons()
+    }
+
+    function renderMinisterButtons() {
+      const box = document.getElementById('ministerButtons')
+      const ministers = Object.keys(allMinisters)
+      box.innerHTML = `
+        <button class="btn ${currentFilter === 'all' ? 'btn-primary' : ''}"
+          style="${currentFilter !== 'all' ? 'background:#e0e0e0; color:#333;' : ''}"
+          onclick="setFilter('all')">Все</button>
+        ${ministers.map(name => `
+          <button class="btn ${currentFilter === name ? 'btn-primary' : ''}"
+            style="${currentFilter !== name ? 'background:#e0e0e0; color:#333;' : ''}"
+            onclick="setFilter('${name}')">${name}</button>
+        `).join('')}
+      `
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter
+      renderMinisterButtons()
+      renderList()
+    }
+
+    // Автозаполнение ID из даты
+    document.getElementById('svcDate').addEventListener('change', async () => {
+      const date = document.getElementById('svcDate').value
+      if (date) {
+        const res = await fetch('/api/data/services')
+        const data = await res.json()
+        // При редактировании исключаем текущую запись из подсчёта
+        const existing = Object.keys(data).filter(k => k.startsWith(date + '-') && k !== editingId)
+        const nextIndex = existing.length + 1
+        document.getElementById('svcId').value = `${date}-${nextIndex}`
+      }
+    })
+
+    async function loadServices() {
+      const res = await fetch('/api/data/services')
+      allServices = await res.json()
+      renderList()
+    }
+
+    function renderList() {
+      const entries = Object.entries(allServices)
+        .filter(([id, item]) => currentFilter === 'all' || item.minister === currentFilter)
+        .sort((a, b) => b[0].localeCompare(a[0]))
+
+      document.getElementById('countLabel').textContent = `(${entries.length})`
+      const tbody = document.getElementById('servicesList')
+
+      if (entries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Служений нет</td></tr>'
+        return
+      }
+
+      tbody.innerHTML = entries.map(([id, item]) => `
+        <tr>
+          <td style="font-size:12px; color:#888;">${id}</td>
+          <td>${item.minister}</td>
+          <td>${item.name}</td>
+          <td style="font-size:12px; color:#aaa;">${item.fileName}</td>
+          <td style="white-space:nowrap;">
+            <button class="btn btn-primary" style="margin-right:6px; padding:6px 12px;"
+              onclick="editService('${id}')">Изменить</button>
+            <button class="btn btn-danger"
+              onclick="deleteService('${id}')">Удалить</button>
+          </td>
+        </tr>
+      `).join('')
+    }
+
+    loadMinisters()
+    loadServices()
+
+    function editService(id) {
+      const item = allServices[id]
+      editingId = id
+      document.getElementById('formTitle').textContent = 'Редактировать служение'
+      document.getElementById('saveBtn').textContent = 'Сохранить'
+      document.getElementById('cancelBtn').style.display = ''
+      document.getElementById('svcId').value = id
+      document.getElementById('svcDate').value = id.slice(0, 10)
+      document.getElementById('svcMinister').value = item.minister
+      document.getElementById('svcName').value = item.name
+      document.getElementById('svcFileName').value = item.fileName
+      document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' })
+    }
+
+    document.getElementById('cancelBtn').addEventListener('click', () => resetForm())
+
+    function resetForm() {
+      editingId = null
+      document.getElementById('formTitle').textContent = 'Добавить служение'
+      document.getElementById('saveBtn').textContent = 'Добавить'
+      document.getElementById('cancelBtn').style.display = 'none'
+      document.getElementById('svcDate').value = ''
+      document.getElementById('svcId').value = ''
+      document.getElementById('svcName').value = ''
+      document.getElementById('svcFileName').value = ''
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', async () => {
+      const newId = document.getElementById('svcId').value.trim()
+      const minister = document.getElementById('svcMinister').value
+      const name = document.getElementById('svcName').value.trim()
+      const fileName = document.getElementById('svcFileName').value.trim()
+
+      if (!newId || !minister || !name || !fileName) {
+        return showAlert('Заполните все поля', 'error')
+      }
+
+      let res
+      if (editingId) {
+        if (newId !== editingId) {
+          // ID изменился — удаляем старую запись и создаём новую с нужным ID
+          await fetch('/api/data/services/' + encodeURIComponent(editingId), { method: 'DELETE' })
+          res = await fetch('/api/data/services/' + encodeURIComponent(newId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ minister, name, fileName })
+          })
+        } else {
+          res = await fetch('/api/data/services/' + encodeURIComponent(editingId), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ minister, name, fileName })
+          })
+        }
+      } else {
+        const date = document.getElementById('svcDate').value
+        if (!date) return showAlert('Укажите дату', 'error')
+        res = await fetch('/api/data/services', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ date, minister, name, fileName })
+        })
+      }
+
+      const data = await res.json()
+      if (data.success) {
+        showAlert(editingId ? 'Служение обновлено' : `Служение добавлено: ${data.id}`, 'success')
+        resetForm()
+        loadServices()
+      } else {
+        showAlert(data.error || 'Ошибка сохранения', 'error')
+      }
+    })
+
+    async function deleteService(id) {
+      if (!confirm(`Удалить служение "${id}"?`)) return
+      const res = await fetch('/api/data/services/' + encodeURIComponent(id), {
+        method: 'DELETE'
+      })
+      const data = await res.json()
+      if (data.success) {
+        showAlert('Служение удалено', 'success')
+        loadServices()
+      } else {
+        showAlert('Ошибка удаления', 'error')
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Главная — Админка</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .stat-block {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .stat-block:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+      transform: translateY(-2px);
+    }
+    .stat-block h3 {
+      font-size: 14px;
+      color: #888;
+      margin: 0 0 10px 0;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-block .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #2c3e50;
+      line-height: 1;
+    }
+    .stat-block .stat-label {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 6px;
+    }
+    .stat-block.status-on .stat-value { color: #27ae60; }
+    .stat-block.status-off .stat-value { color: #e74c3c; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <h2>Церковь Ульяновск</h2>
+      <nav>
+        <a href="/index.html" class="active">Главная</a>
+        <a href="/messages.html">Послание</a>
+        <a href="/ministers.html">Служители</a>
+        <a href="/services.html">Служения</a>
+        <a href="/psalms.html">Псалмы</a>
+        <a href="/music.html">Музыка</a>
+        <a href="/gallery.html">Галерея</a>
+        <a href="/stream.html">Трансляция</a>
+        <a href="/notify.html">Уведомление</a>
+        <a href="/password.html">Смена пароля</a>
+      </nav>
+      <div class="sidebar-logout">
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Главная</h1>
+
+      <div class="card">
+        <h2>Статистика</h2>
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-block"><h3>Загрузка...</h3></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    fetch('/api/auth/check')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.loggedIn) window.location.href = '/login.html'
+        else loadStats()
+      })
+
+    async function loadStats() {
+      // Загружаем все данные параллельно
+      const [messages, services, psalms, music, gallery, stream, notify] = await Promise.all([
+        fetch('/api/data/messages').then(r => r.json()),
+        fetch('/api/data/services').then(r => r.json()),
+        fetch('/api/data/psalms').then(r => r.json()),
+        fetch('/api/data/music').then(r => r.json()),
+        fetch('/api/data/gallery').then(r => r.json()),
+        fetch('/api/data/stream').then(r => r.json()),
+        fetch('/api/data/notify').then(r => r.json()),
+      ])
+
+      // Подсчёт
+      const messagesCount = Object.keys(messages).length
+      const servicesCount = Object.keys(services).length
+
+      let psalmsCount = 0
+      for (const year of Object.values(psalms.psalms || {})) {
+        psalmsCount += Object.keys(year).length
+      }
+
+      const musicCount = Object.keys(music).length
+      const galleryCount = Object.keys(gallery).length
+
+      const streamOn = stream.stream && stream.stream.onOff !== ''
+      const notifyOn = notify.on === 'true' || notify.on === true
+
+      const grid = document.getElementById('statsGrid')
+      grid.innerHTML = `
+        <a href="/messages.html" class="stat-block">
+          <h3>Послание</h3>
+          <div class="stat-value">${messagesCount}</div>
+          <div class="stat-label">проповедей</div>
+        </a>
+        <a href="/services.html" class="stat-block">
+          <h3>Служения</h3>
+          <div class="stat-value">${servicesCount}</div>
+          <div class="stat-label">служений</div>
+        </a>
+        <a href="/psalms.html" class="stat-block">
+          <h3>Псалмы</h3>
+          <div class="stat-value">${psalmsCount}</div>
+          <div class="stat-label">псалмов</div>
+        </a>
+        <a href="/music.html" class="stat-block">
+          <h3>Музыка</h3>
+          <div class="stat-value">${musicCount}</div>
+          <div class="stat-label">записей</div>
+        </a>
+        <a href="/gallery.html" class="stat-block">
+          <h3>Галерея</h3>
+          <div class="stat-value">${galleryCount}</div>
+          <div class="stat-label">альбомов</div>
+        </a>
+        <a href="/stream.html" class="stat-block ${streamOn ? 'status-on' : 'status-off'}">
+          <h3>Трансляция</h3>
+          <div class="stat-value">${streamOn ? 'ВКЛ' : 'ВЫКЛ'}</div>
+          <div class="stat-label">статус</div>
+        </a>
+        <a href="/notify.html" class="stat-block ${notifyOn ? 'status-on' : 'status-off'}">
+          <h3>Уведомление</h3>
+          <div class="stat-value">${notifyOn ? 'ВКЛ' : 'ВЫКЛ'}</div>
+          <div class="stat-label">статус</div>
+        </a>
+      `
+    }
+  </script>
+</body>
+</html>

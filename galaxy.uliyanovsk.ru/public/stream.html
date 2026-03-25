@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Трансляция — Админка</title>
+		<link rel="stylesheet" href="/css/style.css" />
+	</head>
+	<body>
+		<div class="layout">
+			<aside class="sidebar">
+				<h2>Церковь Ульяновск</h2>
+				<nav>
+					<a href="/index.html">Главная</a>
+					<a href="/messages.html">Послание</a>
+					<a href="/ministers.html">Служители</a>
+					<a href="/services.html">Служения</a>
+					<a href="/psalms.html">Псалмы</a>
+        <a href="/music.html">Музыка</a>
+					<a href="/gallery.html">Галерея</a>
+					<a href="/stream.html" class="active">Трансляция</a>
+					<a href="/notify.html">Уведомление</a>
+					<a href="/password.html">Смена пароля</a>
+				</nav>
+				<div class="sidebar-logout">
+					<button onclick="logout()">Выйти</button>
+				</div>
+			</aside>
+
+			<main class="main-content">
+				<h1>Трансляция</h1>
+
+				<div id="alert"></div>
+
+				<div class="card">
+					<h2>Статус трансляции</h2>
+					<div class="toggle-row">
+						<label class="toggle">
+							<input type="checkbox" id="streamToggle" />
+							<span class="toggle-slider"></span>
+						</label>
+						<span id="streamStatus">Загрузка...</span>
+					</div>
+				</div>
+
+				<div class="card">
+					<h2>Дата следующей трансляции</h2>
+					<div class="form-group">
+						<label>Дата и время</label>
+						<input type="datetime-local" id="nextStream" />
+					</div>
+					<button class="btn btn-primary" id="saveBtn">Сохранить</button>
+				</div>
+			</main>
+		</div>
+
+		<script src="/js/common.js"></script>
+		<script>
+			// Проверка авторизации
+			fetch('/api/auth/check')
+				.then(r => r.json())
+				.then(data => {
+					if (!data.loggedIn) window.location.href = '/login.html'
+				})
+
+			const toggle = document.getElementById('streamToggle')
+			const status = document.getElementById('streamStatus')
+			const nextStream = document.getElementById('nextStream')
+			const alertBox = document.getElementById('alert')
+
+			function showAlert(message, type) {
+				alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`
+				setTimeout(() => (alertBox.innerHTML = ''), 3000)
+			}
+
+			// Загрузка данных
+			fetch('/api/data/stream')
+				.then(r => r.json())
+				.then(data => {
+					const isOn = data.stream.onOff !== ''
+					toggle.checked = isOn
+					status.textContent = isOn ? 'Трансляция идёт' : 'Трансляция выключена'
+
+					if (data.next_stream) {
+						// Приводим формат к datetime-local
+						const dt = data.next_stream.replace(' ', 'T').slice(0, 16)
+						nextStream.value = dt
+					}
+				})
+
+			// Переключение трансляции
+			toggle.addEventListener('change', async () => {
+				const isOn = toggle.checked
+				const res = await fetch('/api/data/stream', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ onOff: isOn ? 'on' : '' }),
+				})
+				const data = await res.json()
+				if (data.success) {
+					status.textContent = isOn ? 'Трансляция идёт' : 'Трансляция выключена'
+					showAlert('Статус обновлён', 'success')
+				} else {
+					showAlert('Ошибка сохранения', 'error')
+				}
+			})
+
+			// Сохранение даты
+			document.getElementById('saveBtn').addEventListener('click', async () => {
+				const val = nextStream.value
+				if (!val) return showAlert('Укажите дату', 'error')
+
+				const formatted = val.replace('T', ' ') + ':00'
+				const res = await fetch('/api/data/stream', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						onOff: toggle.checked ? 'on' : '',
+						next_stream: formatted,
+					}),
+				})
+				const data = await res.json()
+				if (data.success) {
+					showAlert('Дата сохранена', 'success')
+				} else {
+					showAlert('Ошибка сохранения', 'error')
+				}
+			})
+		</script>
+	</body>
+</html>
