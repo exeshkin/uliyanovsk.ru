@@ -1,147 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="yandex-verification" content="d72af7aebe06e6ea" />
+		<!-- Yandex.Metrika counter -->
+		<script type="text/javascript">
+			;(function (m, e, t, r, i, k, a) {
+				m[i] =
+					m[i] ||
+					function () {
+						;(m[i].a = m[i].a || []).push(arguments)
+					}
+				m[i].l = 1 * new Date()
+				;((k = e.createElement(t)),
+					(a = e.getElementsByTagName(t)[0]),
+					(k.async = 1),
+					(k.src = r),
+					a.parentNode.insertBefore(k, a))
+			})(
+				window,
+				document,
+				'script',
+				'https://mc.yandex.ru/metrika/tag.js',
+				'ym',
+			)
+			ym(86600993, 'init', {
+				clickmap: true,
+				trackLinks: true,
+				accurateTrackBounce: true,
+				webvisor: true,
+			})
+		</script>
+		<noscript>
+			<div>
+				<img
+					src="https://mc.yandex.ru/watch/86600993"
+					style="position: absolute; left: -9999px"
+					alt=""
+					width="1"
+					height="1"
+				/>
+			</div>
+		</noscript>
+		<!-- /Yandex.Metrika counter -->
+		<link rel="icon" href="img/icon/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="css/style.css?v=20260325" />
+		<link rel="stylesheet" href="css/search.css?v=20260325" />
+		<link rel="stylesheet" href="css/password.css?v=20260325" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="yandex-verification" content="d72af7aebe06e6ea" />
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript">
-        (function (m, e, t, r, i, k, a) {
-            m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
-            m[i].l = 1 * new Date(); k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-        })
-            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-        ym(86600993, "init", {
-            clickmap: true,
-            trackLinks: true,
-            accurateTrackBounce: true,
-            webvisor: true
-        });
-    </script>
-    <noscript>
-        <div><img src="https://mc.yandex.ru/watch/86600993" style="position:absolute; left:-9999px;" alt="" width="1" height="1" /></div>
-    </noscript>
-    <!-- /Yandex.Metrika counter -->
-    <link rel="icon" href="img/icon/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/style.css?v=20260325">
-    <link rel="stylesheet" href="css/search.css?v=20260325">
-    <link rel="stylesheet" href="css/password.css?v=20260325">
+		<link rel="stylesheet" href="css/contacts.css?v=20260325" />
+		<meta name="description" content="Связаться с нами, Отправить сообщение" />
+		<title>Связаться с нами - Общение Христиан</title>
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="ru_RU" />
+		<meta property="og:site_name" content="Общение Христиан" />
+		<meta property="og:title" content="Связаться с нами | Общение Христиан" />
+		<meta
+			property="og:description"
+			content="Контакты и обратная связь церкви «Общение Христиан» в Ульяновске."
+		/>
+		<meta property="og:image" content="https://uliyanovsk.ru/img/logo.svg" />
+		<meta property="og:url" content="https://uliyanovsk.ru/contacts.html" />
+		<style>
+			/* Отступ от текста до блока с почтой */
+			.contacts__email-block {
+				margin-top: 2rem;
+				padding: 1.5rem;
+				background: #f5f7fa; /* или ваш фон формы/секции */
+				border-radius: 8px;
+				text-align: center;
+				max-width: 500px;
+				margin-left: auto;
+				margin-right: auto;
+				font-size: 1.25rem;
+			}
 
-<link rel="stylesheet" href="css/contacts.css?v=20260325">
-<meta name="description" content="Связаться с нами, Отправить сообщение" />
-<title>Связаться с нами - Общение Христиан</title>
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ru_RU" />
-    <meta property="og:site_name" content="Общение Христиан" />
-    <meta property="og:title" content="Связаться с нами | Общение Христиан" />
-    <meta property="og:description" content="Контакты и обратная связь церкви «Общение Христиан» в Ульяновске." />
-    <meta property="og:image" content="https://uliyanovsk.ru/img/logo.svg" />
-    <meta property="og:url" content="https://uliyanovsk.ru/contacts.html" />
-</head>
+			.contacts__email-label {
+				margin: 0 0 0.5rem;
+				color: #555;
+				line-height: 1.4;
+			}
 
-<body class="body" id="top">
-	<div class="mask">
-	<div class="loader"></div>
-</div>
-	<div class="wrapper">
-		<!--#include virtual="/includes/header.html" -->
+			.contacts__email-link {
+				display: inline-block;
+				font-weight: 600;
+				color: #0056b3; /* замените на основной цвет вашего сайта */
+				text-decoration: none;
+				border-bottom: 2px solid transparent;
+				transition: all 0.2s ease;
+			}
 
+			.contacts__email-link:hover {
+				color: #003d82;
+				border-bottom-color: #0056b3;
+			}
 
-		<main class="main main-contacts">
-			<div class="contacts">
-				<div class="container">
-					<div class="contacts__inner">
-						<h2 class="titles-block">Напишите нам</h2>
-						<div class="contacts__text">Вы можете задать вопрос или просто оставить комментарий</div>
-						<div class="form">
-							<form class="form__body" action="#" id="form">
-								<div class="form__item">
-									<label class="form__label" for="formName">Имя (обязательно)<span
-											class="form__star-required">*</span>:</label>
-									<input class="form__input _req" id="formName" type="text" name="name">
-								</div>
-								<div class="form__item">
-									<label class="form__label" for="formEmail">E-mail или телефон (обязательно)<span
-											class="form__star-required">*</span>:</label>
-									<input class="form__input _email _req" id="formEmail" type="text" name="email">
-								</div>
-								<div class="form__item">
-									<label class="form__label" for="formTopic">Тема:</label>
-									<input class="form__input" id="formTopic" type="text" name="topic">
-								</div>
-								<div class="form__item">
-									<label class="form__label" for="formMessage">Комментарии / вопросы (обязательно)<span
-											class="form__star-required">*</span>:</label>
-									<textarea class="form__input _req" id="formMessage" name="message"></textarea>
-								</div>
-								<div class="form__item">
-									<div class="checkbox">
-										<input class="checkbox__input _req" id="formAgreement" type="checkbox" name="agreement">
-										<label class="checkbox__label" for="formAgreement">
-											<div class="form__rules-block">Я даю своё согласие на обработку персональных данных в
-												соответствии с <a class="form__rules-open" href="javascript:void(0);">Правилами</a>
-												(обязательно)<span class="form__star-required">*</span>
-											</div>
-										</label>
-									</div>
-								</div>
-								<input id="secret" type="hidden" name="secret" value="">
-								<button class="form__button" type="submit">Отправить сообщение</button>
-							</form>
+			.contacts__email-note {
+				margin: 0.75rem 0 0;
+				color: #777;
+			}
+
+			/* Адаптив для мобильных */
+			@media (max-width: 576px) {
+				.contacts__email-block {
+					padding: 1.25rem 1rem;
+					max-width: 100%;
+					font-size: 1.1rem;
+				}
+			}
+		</style>
+	</head>
+
+	<body class="body" id="top">
+		<div class="mask">
+			<div class="loader"></div>
+		</div>
+		<div class="wrapper">
+			<!--#include virtual="/includes/header.html" -->
+
+			<main class="main main-contacts">
+				<div class="contacts">
+					<div class="container">
+						<div class="contacts__inner">
+							<h2 class="titles-block">Напишите нам</h2>
+							<div class="contacts__text">
+								Вы можете задать вопрос, оставить комментарий или направить
+								запрос
+							</div>
+
+							<div class="contacts__email-block">
+								<p class="contacts__email-label">
+									Свяжитесь с нами по электронной почте:
+								</p>
+								<a href="mailto:site@uliyanovsk.ru" class="contacts__email-link"
+									>site@uliyanovsk.ru</a
+								>
+								<p class="contacts__email-note">
+									Мы обязательно ответим вам в ближайшее время
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="rules">
-				<span class="rules__close"></span>
-				<h3 class="rules__title">Правила обработки персональных данных</h3>
-				<div class="rules__text-block">
-					<p class="rules__text">Заполняя настоящую форму, в соответствии с требованиями статьи 9 Федерального
-						закона от 27.07.2006 № 152-ФЗ «О персональных данных», я подтверждаю свое согласие на обработку
-						администратором сайта вносимых в форму моих персональных данных</p>
-					<p class="rules__text">Предоставляю администратору сайта право осуществлять все действия (операции) с
-						моими персональными данными, включая сбор, систематизацию, накопление, хранение, обновление,
-						изменение, использование, обезличивание, блокирование, уничтожение</p>
-					<p class="rules__text">Целью обработки персональных данных является поддержание со мной обратной связи на
-						основании заполненной формы</p>
-					<p class="rules__text">Администратор сайта имеет право на обмен (прием и передачу) моими персональными
-						данными с использованием машинных носителей или по каналам связи, с соблюдением мер, обеспечивающих их
-						защиту от несанкционированного доступа</p>
-					<p class="rules__text">Настоящее согласие действует бессрочно, срок хранения моих персональных данных не
-						ограничен</p>
-					<p class="rules__text">Оставляю за собой право отозвать свое согласие посредством составления
-						соответствующего письменного документа, который может быть направлен мной в адрес администратора сайта
-						по электронной почте</p>
-				</div>
-				<div class="rules__close-btn">Закрыть</div>
-			</div>
+				<div class="search"></div>
+			</main>
 
-			<div class="alert">
-				<div class="alert__inner">
-					<div class="alert__close"></div>
-					<div class="alert__message">Поля, обозначенные звездочкой, обязательны для заполнения!</div>
-				</div>
-			</div>
+			<!--#include virtual="/includes/footer.html" -->
+		</div>
 
-			<div class="message-result">
-				<div class="message-result__inner">
-					<div class="message-result__close"></div>
-					<div class="message-result__message"> </div>
-				</div>
-			</div>
-
-			<div class="search"></div>
-
-		</main>
-
-		<!--#include virtual="/includes/footer.html" -->
-	</div>
-
-	<script type="module" src="js/modules/header.js?v=20260325"></script>
-	<script type="module" src="js/contacts.js?v=20260325"></script>
-
-</body>
-
+		<script type="module" src="js/modules/header.js?v=20260430"></script>
+		<script type="module" src="js/contacts.js?v=20260430"></script>
+	</body>
 </html>

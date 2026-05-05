@@ -1,117 +1,103 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" href="img/icon/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="css/style.css?v=20260325" />
+		<link rel="stylesheet" href="css/search.css?v=20260325" />
+		<link rel="stylesheet" href="css/password.css?v=20260325" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="yandex-verification" content="d72af7aebe06e6ea" />
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript">
-        (function (m, e, t, r, i, k, a) {
-            m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
-            m[i].l = 1 * new Date(); k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-        })
-            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-        ym(86600993, "init", {
-            clickmap: true,
-            trackLinks: true,
-            accurateTrackBounce: true,
-            webvisor: true
-        });
-    </script>
-    <noscript>
-        <div><img src="https://mc.yandex.ru/watch/86600993" style="position:absolute; left:-9999px;" alt="" width="1" height="1" /></div>
-    </noscript>
-    <!-- /Yandex.Metrika counter -->
-    <link rel="icon" href="img/icon/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/style.css?v=20260325">
-    <link rel="stylesheet" href="css/search.css?v=20260325">
-    <link rel="stylesheet" href="css/password.css?v=20260325">
+		<link rel="stylesheet" href="css/stream.css?v=20260325" />
+		<script src="js/select2/jquery.min.js"></script>
+		<script src="js/hls/hls.js"></script>
+		<meta name="description" content="Трансляция, Прямой эфир" />
+		<title>Видеотрансляция - Общение Христиан</title>
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="ru_RU" />
+		<meta property="og:site_name" content="Общение Христиан" />
+		<meta property="og:title" content="Видеотрансляция | Общение Христиан" />
+		<meta
+			property="og:description"
+			content="Прямая видеотрансляция богослужений церкви «Общение Христиан» в Ульяновске."
+		/>
+		<meta
+			property="og:image"
+			content="https://uliyanovsk.ru/img/stream/fon-1000.webp"
+		/>
+		<meta property="og:url" content="https://uliyanovsk.ru/streamvideo.html" />
+	</head>
 
-<link rel="stylesheet" href="css/stream.css?v=20260325">
-<script src="js/select2/jquery.min.js"></script>
-<script src="js/hls/hls.js"></script>
-<meta name="description" content="Трансляция, Прямой эфир" />
-<title>Видеотрансляция - Общение Христиан</title>
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ru_RU" />
-    <meta property="og:site_name" content="Общение Христиан" />
-    <meta property="og:title" content="Видеотрансляция | Общение Христиан" />
-    <meta property="og:description" content="Прямая видеотрансляция богослужений церкви «Общение Христиан» в Ульяновске." />
-    <meta property="og:image" content="https://uliyanovsk.ru/img/stream/fon-1000.webp" />
-    <meta property="og:url" content="https://uliyanovsk.ru/streamvideo.html" />
-</head>
+	<body class="body" id="top">
+		<div class="mask">
+			<div class="loader"></div>
+		</div>
+		<div class="wrapper">
+			<!--#include virtual="/includes/header.html" -->
 
-<body class="body" id="top">
-	<div class="mask">
-	<div class="loader"></div>
-</div>
-	<div class="wrapper">
-		<!--#include virtual="/includes/header.html" -->
+			<main class="main">
+				<div class="stream">
+					<div class="container">
+						<div class="stream__inner">
+							<h2 class="titles-block">Прямая трансляция</h2>
+							<div class="stream__block">
+								<div class="stream__screen">
+									<div class="stream__general-timetable">
+										<div>Общее расписание собраний</div>
+										<div>(Ульяновское время):</div>
+										<div>
+											– по средам в 19:00<br />– по воскресеньям в 12:00
+										</div>
+									</div>
 
+									<div class="stream__time-start">
+										<div>Следующая трансляция состоится</div>
+										<div>(по вашему времени):</div>
+										<div id="next-broadcast">Загрузка...</div>
+									</div>
 
-		<main class="main">
-
-			<div class="stream">
-				<div class="container">
-					<div class="stream__inner">
-						<h2 class="titles-block">Прямая трансляция</h2>
-						<div class="stream__block">
-
-							<div class="stream__screen">
-
-								<div class="stream__general-timetable">
-									<div>Общее расписание собраний</div>
-									<div>(Ульяновское время):</div>
-									<div>– по средам в 19:00<br>– по воскресеньям в 12:00</div>
+									<div class="stream__timer-block">
+										<div class="stream__timer-title">
+											До начала трансляции осталось:
+										</div>
+										<div id="countdown" class="stream__timer-time">
+											Загрузка...
+										</div>
+									</div>
 								</div>
 
-								<div class="stream__time-start">
-									<div>Следующая трансляция состоится</div>
-									<div>(по вашему времени):</div>
-									<div id="next-broadcast">Загрузка...</div>
+								<div class="stream__hls">
+									<video
+										id="video"
+										controlsList="noplaybackrate"
+										controls
+									></video>
 								</div>
-
-								<div class="stream__timer-block">
-									<div class="stream__timer-title">До начала трансляции осталось:</div>									
-									<div id="countdown" class="stream__timer-time">Загрузка...</div>									
-								</div>
-
 							</div>
 
-							<div class="stream__hls">
-								<video id="video" controlsList = "noplaybackrate" controls></video>
-							</div>							
-
-						</div>
-
-						<div class="stream__quality">
-							<span>Качество:</span>
-							<select id="vidq" title="video-quality">
+							<div class="stream__quality">
+								<span>Качество:</span>
+								<select id="vidq" title="video-quality">
 									<option value="720p">Высокое</option>
 									<option value="480p">Среднее</option>
 									<option value="360p">Низкое</option>
-							</select>
-						</div>
-						
-						<div class="search"></div>
+								</select>
+							</div>
 
-						<div class="password"></div>
+							<div class="search"></div>
+
+							<div class="password"></div>
+						</div>
 					</div>
 				</div>
-			</div>
+			</main>
 
-		</main>
+			<!--#include virtual="/includes/footer.html" -->
+		</div>
 
-		<!--#include virtual="/includes/footer.html" -->
-	</div>
-
-	
-	<script type="module" src="js/modules/header.js?v=20260325"></script>
-	<script type="module" src="js/streamvideo.js?v=20260325"></script>
-	<script type="module" src="js/streamvideo-timer.js?v=20260325"></script>
-	<script type="module" src="js/select2/select2.min.js"></script>
-
-</body>
-
+		<script type="module" src="js/modules/header.js?v=20260430"></script>
+		<script type="module" src="js/streamvideo.js?v=20260325"></script>
+		<script type="module" src="js/streamvideo-timer.js?v=20260325"></script>
+		<script type="module" src="js/select2/select2.min.js"></script>
+	</body>
 </html>
