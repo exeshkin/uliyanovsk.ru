@@ -236,7 +236,7 @@
 		"fileName": "1957_08_11_Velichaishii_Dar_v_Biblii"
 	},
 	"1947-11-23-1": {
-		"name": "Дети Израиля",
+		"name": "Дети Израиля (перевод Москва)",
 		"fileName": "1947_11_23_Deti_Izrailya"
 	},
 	"1949-12-25-1": {
@@ -1510,5 +1510,25 @@
 	"1956-10-02-2": {
 		"name": "Пророк Елисей",
 		"fileName": "1956_10_02_Prorok_Elisei"
+	},
+	"1947-11-23-2": {
+		"name": "Дети Израиля (перевод Венгрия)",
+		"fileName": "1947_11_23_Deti_Izrailya-hu"
+	},
+	"1957-07-14-1": {
+		"name": "Как орлица будоражит своё гнездо",
+		"fileName": "1957_07_14_Kak_orlitca_budorazhit_svoyo_gnezdo"
+	},
+	"1953-09-07-1": {
+		"name": "Господи, покажи нам Отца, и этого нам достаточно",
+		"fileName": "1953_09_07_Gospodi_pokazhi_nam_Otca_i_etogo_nam_dostatochno"
+	},
+	"1959-12-20-1": {
+		"name": "Отождествлённые с Христом",
+		"fileName": "1959_12_20_Otozhdestvlennye_s_Hristom"
+	},
+	"1947-12-07-1": {
+		"name": "Переживания",
+		"fileName": "1947_12_07_Perezhivaniya"
 	}
 }

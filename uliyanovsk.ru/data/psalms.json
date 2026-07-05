@@ -1016,53 +1016,178 @@
 		},
 		"2026": {
 			"1": {
-				"name": "✳ 26-0111 — И я буду гореть по Тебе",
+				"name": "26-0111 — И я буду гореть по Тебе",
 				"fileName": "26-0111_I_ya_budu_goret_po_Tebe",
 				"hasVideo": true
 			},
 			"2": {
-				"name": "✳ 26-0111 — Тихое веянье Духа Святого",
+				"name": "26-0111 — Тихое веянье Духа Святого",
 				"fileName": "26-0111_Tihoe_veyane_Duha_Svyatogo",
 				"hasVideo": true
 			},
 			"3": {
-				"name": "✳ 26-0201 — Взгляни, Невеста, на себя",
+				"name": "26-0201 — Взгляни, Невеста, на себя",
 				"fileName": "26-0201_Vzglyani_Nevesta_na_sebya",
 				"hasVideo": true
 			},
 			"4": {
-				"name": "✳ 26-0201 — Достигайте любви",
+				"name": "26-0201 — Достигайте любви",
 				"fileName": "26-0201_Dostigajte_lyubvi",
 				"hasVideo": true
 			},
 			"5": {
-				"name": "✳ 26-0215 — Это новая заря",
+				"name": "26-0215 — Это новая заря",
 				"fileName": "26-0215_Ehto_novaya_zarya",
 				"hasVideo": true
 			},
 			"6": {
-				"name": "✳ 26-0222 — Велики и чудны дела Твои",
+				"name": "26-0222 — Велики и чудны дела Твои",
 				"fileName": "26-0222_Veliki_i_chudny_dela_Tvoi",
 				"hasVideo": true
 			},
 			"7": {
-				"name": "✳ 26-0222 — Мы должны светить",
+				"name": "26-0222 — Мы должны светить",
 				"fileName": "26-0222_My_dolzhny_svetit",
 				"hasVideo": true
 			},
 			"8": {
-				"name": "✳ 26-0222 — На Тебя я уповаю",
+				"name": "26-0222 — На Тебя я уповаю",
 				"fileName": "26-0222_Na_Tebya_ya_upovayu",
 				"hasVideo": true
 			},
 			"9": {
-				"name": "✳ 26-0322 — Ты мой покой",
+				"name": "26-0322 — Ты мой покой",
 				"fileName": "26-0322_Ty_moj_pokoj",
 				"hasVideo": true
 			},
 			"10": {
-				"name": "✳ 26-0322 — Я хочу светить",
+				"name": "26-0322 — Я хочу светить",
 				"fileName": "26-0322_Ya_hochu_svetit",
+				"hasVideo": true
+			},
+			"11": {
+				"name": "26-0325 — Пью из родника",
+				"fileName": "26-0325_Pyu_iz_rodnika",
+				"hasVideo": true
+			},
+			"12": {
+				"name": "26-0329 — Господь собрал на праздник",
+				"fileName": "26-0329_Gospod_sobral_na_prazdnik",
+				"hasVideo": true
+			},
+			"13": {
+				"name": "26-0329 — Душа не может жить без Веры",
+				"fileName": "26-0329_Dusha_ne_mozhet_zhit_bez_Very",
+				"hasVideo": true
+			},
+			"14": {
+				"name": "26-0329 — Пусть Поклонники восстанут",
+				"fileName": "26-0329_Pust_Poklonniki_vosstanut",
+				"hasVideo": true
+			},
+			"15": {
+				"name": "26-0412 — Где растут маслины",
+				"fileName": "26-0412_Gde_rastut_masliny",
+				"hasVideo": true
+			},
+			"16": {
+				"name": "26-0412 — Судья всей Земли",
+				"fileName": "26-0412_Sudya_vsej_Zemli",
+				"hasVideo": true
+			},
+			"17": {
+				"name": "26-0419 — Держи меня",
+				"fileName": "26-0419_Derzhi_menya",
+				"hasVideo": true
+			},
+			"18": {
+				"name": "26-0419 — На небесах Ходатай мой",
+				"fileName": "26-0419_Na_nebesah_Hodataj_moj",
+				"hasVideo": true
+			},
+			"19": {
+				"name": "26-0419 — Это утро встречаю я молитвой к Тебе",
+				"fileName": "26-0419_Ehto_utro_vstrechayu_ya_molitvoj_k_Tebe",
+				"hasVideo": true
+			},
+			"20": {
+				"name": "✳ 26-0517 — Я значим не самим собой",
+				"fileName": "26-0517_Ya_znachim_ne_samim_soboj",
+				"hasVideo": true
+			},
+			"21": {
+				"name": "✳ 26-0522 — Тебе всю жизнь, о Мастер, отдаю",
+				"fileName": "26-0522_Tebe_vsyu_zhizn_o_Master_otdayu",
+				"hasVideo": true
+			},
+			"22": {
+				"name": "✳ 26-0523 — Голубь ведёт Орла",
+				"fileName": "26-0523_Golub_vediot_Orla",
+				"hasVideo": true
+			},
+			"23": {
+				"name": "✳ 26-0523 — За наградой беги",
+				"fileName": "26-0523_Za_nagradoj_begi",
+				"hasVideo": true
+			},
+			"24": {
+				"name": "✳ 26-0523 — Зачем, мой Господь",
+				"fileName": "26-0523_Zachem_moj_Gospod",
+				"hasVideo": true
+			},
+			"25": {
+				"name": "✳ 26-0523 — Мир Слова",
+				"fileName": "26-0523_Mir_Slova",
+				"hasVideo": true
+			},
+			"26": {
+				"name": "✳ 26-0523 — Христос есть Свет",
+				"fileName": "26-0523_Hristos_est_Svet",
+				"hasVideo": true
+			},
+			"27": {
+				"name": "✳ 26-0523 — Я с Тобой",
+				"fileName": "26-0523_Ya_s_Toboj",
+				"hasVideo": true
+			},
+			"28": {
+				"name": "✳ 26-0524 — Бог — дорога моя",
+				"fileName": "26-0524_Bog_doroga_moya",
+				"hasVideo": true
+			},
+			"29": {
+				"name": "✳ 26-0524 — Из-под Престола выходит Слово",
+				"fileName": "26-0524_Iz-pod_Prestola_vyhodit_Slovo",
+				"hasVideo": true
+			},
+			"30": {
+				"name": "✳ 26-0524 — Любовь Твоя искупляющая",
+				"fileName": "26-0524_Lyubov_Tvoya_iskuplyayushchaya",
+				"hasVideo": true
+			},
+			"31": {
+				"name": "✳ 26-0524 — Последнее Слово за Богом моим",
+				"fileName": "26-0524_Poslednee_Slovo_za_Bogom_moim",
+				"hasVideo": true
+			},
+			"32": {
+				"name": "✳ 26-0524 — Стой на передовой",
+				"fileName": "26-0524_Stoj_na_peredovoj",
+				"hasVideo": true
+			},
+			"33": {
+				"name": "✳ 26-0531 — Воины Христа, вперёд!",
+				"fileName": "26-0531_Voiny_Hrista_vperiod",
+				"hasVideo": true
+			},
+			"34": {
+				"name": "✳ 26-0531 — Время прихода Веры",
+				"fileName": "26-0531_Vremya_prihoda_Very",
+				"hasVideo": true
+			},
+			"35": {
+				"name": "✳ 26-0531 — Создавая пылинки вселенной",
+				"fileName": "26-0531_Sozdavaya_pylinki_vselennoj",
 				"hasVideo": true
 			}
 		}

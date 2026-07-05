@@ -132,70 +132,20 @@
 		"whenWasThat": "Сентябрь 2024",
 		"urlScreen": "2024-09-Poezdka-v-Kazan.webp"
 	},
-	"2024-05-30-23-00": {
+	"2026-06-01-1": {
 		"category": "Видеообзор",
-		"name": "28-я годовщина церкви &laquo;Общение Христиан&raquo;",
+		"name": "30-я годовщина церкви «Общение Христиан»",
 		"nameOptional": "",
-		"whenWasThat": "Май 2024",
-		"urlScreen": "2024-05-Obshchenie-Hristian-28.webp"
+		"whenWasThat": "Май 2026",
+		"urlScreen": "2026-05-Obshchenie-Hristian-30.webp"
 	},
-	"2024-07-10-23-00": {
+	"2026-06-02-1": {
 		"category": "Фотоальбом",
-		"name": "Поездка в Беларусь, Лиски",
+		"name": "30-я годовщина церкви «Общение Христиан»",
 		"nameOptional": "",
-		"whenWasThat": "Июнь 2024",
-		"urlGallery": "files/foto/2024-06-Liski/",
-		"urlScreen": "2024-06-Liski.webp",
-		"numberOfPhotos": 100
-	},
-	"2024-06-10-23-00": {
-		"category": "Фотоальбом",
-		"name": "Выезд на природу в Тереньгу",
-		"nameOptional": "",
-		"whenWasThat": "Июнь 2024",
-		"urlGallery": "files/foto/2024-06-Terenga/",
-		"urlScreen": "2024-06-Terenga.webp",
-		"numberOfPhotos": 100
-	},
-	"2024-06-01-23-00": {
-		"category": "Фотоальбом",
-		"name": "28-я годовщина церкви &laquo;Общение Христиан&raquo;",
-		"nameOptional": "",
-		"whenWasThat": "Май 2024",
-		"urlGallery": "files/foto/2024-05-Obshchenie-Hristian-28/",
-		"urlScreen": "2024-05-Obshchenie-Hristian-28.webp",
-		"numberOfPhotos": 220
-	},
-	"2024-02-25-23-00": {
-		"category": "Видеообзор",
-		"name": "Поездка в Алушту и Мелитополь",
-		"nameOptional": "",
-		"whenWasThat": "Февраль 2024",
-		"urlScreen": "2024-02-Alushta-Melitopol.webp"
-	},
-	"2024-02-24-23-30-00": {
-		"category": "Видеообзор",
-		"name": "Выезд за город на отдых",
-		"nameOptional": "",
-		"whenWasThat": "Февраль 2024",
-		"urlScreen": "2024-02-Vyezd-za-gorod-na-otdyh.webp"
-	},
-	"2024-03-03-23-00": {
-		"category": "Фотоальбом",
-		"name": "Выезд на Голубое озеро",
-		"nameOptional": "",
-		"whenWasThat": "Март 2024",
-		"urlGallery": "files/foto/2024-03-Goluboe-ozero/",
-		"urlScreen": "2024-03-Goluboe-ozero.webp",
-		"numberOfPhotos": 43
-	},
-	"2024-02-24-23-00": {
-		"category": "Фотоальбом",
-		"name": "Выезд за город на отдых",
-		"nameOptional": "",
-		"whenWasThat": "Февраль 2024",
-		"urlGallery": "files/foto/2024-02-Bayarskaya-Usadba/",
-		"urlScreen": "2024-02-Bayarskaya-Usadba.webp",
-		"numberOfPhotos": 106
+		"whenWasThat": "Май 2025",
+		"urlScreen": "2026-05-Obshchenie-Hristian-30.webp",
+		"urlGallery": "files/foto/2026-05-Obshchenie-Hristian-30/",
+		"numberOfPhotos": 62
 	}
 }

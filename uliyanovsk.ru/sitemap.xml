@@ -25,12 +25,17 @@
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://uliyanovsk.ru/minister-rybalchenko.html</loc>
+        <loc>https://uliyanovsk.ru/minister-ryabov.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://uliyanovsk.ru/minister-ryabov.html</loc>
+        <loc>https://uliyanovsk.ru/minister-svistun.html</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://uliyanovsk.ru/minister-kovalenko.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -52,7 +57,7 @@
         <priority>0.8</priority>
     </url>
 
-    <!-- Поклонение -->
+   <!-- Поклонение -->
     <url>
         <loc>https://uliyanovsk.ru/worship.html</loc>
         <changefreq>monthly</changefreq>
@@ -61,17 +66,17 @@
 
     <!-- Псалмы -->
     <url>
+        <loc>https://uliyanovsk.ru/psalms-2026.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://uliyanovsk.ru/psalms-2025.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://uliyanovsk.ru/psalms-2024.html</loc>
-        <changefreq>yearly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://uliyanovsk.ru/psalms-2023.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -93,6 +98,13 @@
         <loc>https://uliyanovsk.ru/streamvideo.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
+    </url>
+
+    <!-- Контакты -->
+    <url>
+        <loc>https://uliyanovsk.ru/contacts.html</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
     </url>
 
 </urlset>

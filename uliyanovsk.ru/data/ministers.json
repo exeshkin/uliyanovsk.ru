@@ -14,14 +14,19 @@
 		"pathMp3": "files/mp3/services/vitaliy_storozhok/",
 		"pathMp4": "files/video/services/vitaliy_storozhok/"
 	},
-	"Алексей Рыбальченко": {
-		"link": "minister-rybalchenko.html",
-		"pathMp3": "files/mp3/services/aleksey_rybalchenko/",
-		"pathMp4": "files/video/services/aleksey_rybalchenko/"
-	},
 	"Владимир Рябов": {
 		"link": "minister-ryabov.html",
 		"pathMp3": "files/mp3/services/vladimir_ryabov/",
 		"pathMp4": "files/video/services/vladimir_ryabov/"
+	},
+	"Вячеслав Коваленко": {
+		"link": "minister-kovalenko.html",
+		"pathMp3": "files/mp3/services/vyacheslav_kovalenko/",
+		"pathMp4": "files/video/services/vyacheslav_kovalenko/"
+	},
+	"Дмитрий Свистун": {
+		"link": "minister-svistun.html",
+		"pathMp3": "files/mp3/services/dmitriy_svistun/",
+		"pathMp4": "files/video/services/dmitriy_svistun/"
 	}
 }
